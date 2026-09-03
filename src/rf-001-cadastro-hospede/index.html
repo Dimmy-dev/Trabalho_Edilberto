@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grand Plaza Hotel — Cadastro de Hóspede (RF-001)</title>
+  <style>
+    /* ==========================================================================
+       Design System Antisslop — Grand Plaza Hotel Management
+       Baseado em: frontend-rules.md (StyleSeed + Baseline UI)
+       ========================================================================== */
+    :root {
+      --bg-canvas: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --bg-input: #ffffff;
+
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+
+      --brand-primary: #1e3a8a;
+      --brand-hover: #1e40af;
+      --brand-focus-ring: rgba(30, 58, 138, 0.15);
+
+      --state-success-border: #16a34a;
+      --state-success-bg: #f0fdf4;
+      --state-success-text: #15803d;
+
+      --state-error-border: #dc2626;
+      --state-error-bg: #fef2f2;
+      --state-error-text: #b91c1c;
+
+      --border-default: #e2e8f0;
+      --border-hover: #cbd5e1;
+
+      --radius-control: 8px;
+      --radius-card: 14px;
+
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+      --shadow-focus: 0 0 0 3px var(--brand-focus-ring);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    /* Header Corporativo */
+    .app-header {
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-card);
+      padding: 16px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .brand-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--brand-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-title svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .system-status {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--state-success-border);
+      display: inline-block;
+    }
+
+    /* Layout Principal em Grid */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+    }
+
+    /* Card Padrão */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 28px 24px;
+    }
+
+    .card-header {
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .card-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* Formulário e Controles */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 600px) {
+      .form-row.two-cols {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input, textarea {
+      width: 100%;
+      height: 42px;
+      padding: 8px 12px;
+      font-size: 0.875rem;
+      font-family: inherit;
+      color: var(--text-primary);
+      background: var(--bg-input);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-control);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    textarea {
+      height: 72px;
+      resize: vertical;
+    }
+
+    input:hover, textarea:hover {
+      border-color: var(--border-hover);
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--brand-primary);
+      box-shadow: var(--shadow-focus);
+    }
+
+    /* Estados de Validação Visual */
+    .input-wrapper.is-valid input {
+      border-color: var(--state-success-border);
+      background-color: var(--state-success-bg);
+    }
+
+    .input-wrapper.is-invalid input {
+      border-color: var(--state-error-border);
+      background-color: var(--state-error-bg);
+    }
+
+    .field-feedback {
+      font-size: 0.75rem;
+      margin-top: 4px;
+      display: none;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .input-wrapper.is-invalid + .field-feedback {
+      display: flex;
+      color: var(--state-error-text);
+    }
+
+    /* Botões */
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      height: 42px;
+      padding: 0 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--radius-control);
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background-color: var(--brand-primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--brand-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-subtle);
+      border-color: var(--border-default);
+      color: var(--text-secondary);
+    }
+
+    .btn-secondary:hover {
+      background-color: #e2e8f0;
+      color: var(--text-primary);
+    }
+
+    .btn-sm {
+      font-size: 0.75rem;
+      height: 32px;
+      padding: 0 12px;
+    }
+
+    .demo-actions-footer {
+      margin-top: 16px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* Spinner Animado */
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Alerta de Confirmação (Estado de Sucesso) */
+    .success-panel {
+      display: none;
+      background: var(--state-success-bg);
+      border: 1px solid var(--state-success-border);
+      border-radius: var(--radius-control);
+      padding: 16px;
+      margin-top: 20px;
+    }
+
+    .success-panel.is-active {
+      display: block;
+    }
+
+    .success-header {
+      font-weight: 600;
+      color: var(--state-success-text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .success-details {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+
+    /* Alerta Global de Erro */
+    .error-banner {
+      display: none;
+      background: var(--state-error-bg);
+      border: 1px solid var(--state-error-border);
+      border-radius: var(--radius-control);
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      font-size: 0.8125rem;
+      color: var(--state-error-text);
+    }
+
+    .error-banner.is-active {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Tabela de Hóspedes Cadastrados */
+    .hospedes-table-wrap {
+      margin-top: 12px;
+      overflow-x: auto;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-control);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--bg-subtle);
+      padding: 10px 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-default);
+      color: var(--text-primary);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .empty-state {
+      padding: 32px 16px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .tag-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header Corporativo -->
+    <header class="app-header">
+      <div class="brand-title">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+        </svg>
+        Grand Plaza Hotel — Gestão de Recepção
+      </div>
+      <div class="system-status">
+        <span class="status-dot"></span>
+        <span id="backendStatus">Conectado: Banco de Dados Relacional (API REST)</span>
+      </div>
+    </header>
+
+    <div class="main-grid">
+      <!-- Coluna 1: Formulário Principal (RF-001) -->
+      <section class="card">
+        <div class="card-header">
+          <h1 class="card-title">Cadastro de Novo Hóspede (RF-001)</h1>
+          <p class="card-subtitle">Preencha os dados do hóspede para registro de hospedagem e conformidade de segurança.</p>
+        </div>
+
+        <!-- Banner de Erro Global -->
+        <div id="errorBanner" class="error-banner" role="alert">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+          </svg>
+          <span id="errorMessage">Mensagem de erro</span>
+        </div>
+
+        <form id="formHospede" novalidate>
+          <div class="form-group">
+            <label for="nome">Nome Completo *</label>
+            <div class="input-wrapper" id="wrap-nome">
+              <input type="text" id="nome" name="nome" placeholder="Ex.: Carlos Eduardo Mendes" required minlength="3">
+            </div>
+            <div class="field-feedback" id="feed-nome">Informe o nome completo com pelo menos 3 caracteres.</div>
+          </div>
+
+          <div class="form-row two-cols">
+            <div class="form-group">
+              <label for="email">E-mail *</label>
+              <div class="input-wrapper" id="wrap-email">
+                <input type="email" id="email" name="email" placeholder="carlos.mendes@email.com" required>
+              </div>
+              <div class="field-feedback" id="feed-email">Informe um endereço de e-mail válido.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="cpf">CPF (11 dígitos) *</label>
+              <div class="input-wrapper" id="wrap-cpf">
+                <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" maxlength="14" required>
+              </div>
+              <div class="field-feedback" id="feed-cpf">CPF inválido segundo o algoritmo módulo 11.</div>
+            </div>
+          </div>
+
+          <div class="form-row two-cols">
+            <div class="form-group">
+              <label for="telefone">Telefone / WhatsApp *</label>
+              <div class="input-wrapper" id="wrap-telefone">
+                <input type="text" id="telefone" name="telefone" placeholder="(11) 99999-8888" maxlength="15" required>
+              </div>
+              <div class="field-feedback" id="feed-telefone">Informe o telefone com DDD (mínimo 10 dígitos).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="dataNascimento">Data de Nascimento *</label>
+              <div class="input-wrapper" id="wrap-dataNascimento">
+                <input type="date" id="dataNascimento" name="dataNascimento" required>
+              </div>
+              <div class="field-feedback" id="feed-dataNascimento">A data não pode ser futura ou anterior a 1900.</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="observacoes">Observações de Hospedagem (Opcional)</label>
+            <div class="input-wrapper">
+              <textarea id="observacoes" name="observacoes" placeholder="Preferências de quarto, restrições alimentares ou observações VIP..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="btnSalvar" class="btn btn-primary">
+              <span id="btnText">Confirmar Cadastro de Hóspede</span>
+            </button>
+            <button type="button" id="btnLimpar" class="btn btn-secondary">Limpar Formulário</button>
+          </div>
+        </form>
+
+        <!-- Estado de Sucesso (Card de Confirmação) -->
+        <div id="successPanel" class="success-panel" role="region">
+          <div class="success-header">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Hóspede Cadastrado com Sucesso!
+          </div>
+          <div class="success-details" id="successDetails">
+            Registro gravado no banco de dados e trilha de auditoria criada.
+          </div>
+        </div>
+      </section>
+
+      <!-- Coluna 2: Hóspedes Cadastrados (Comprovação de Persistência) -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="card-title">Hóspedes Registrados</h2>
+          <p class="card-subtitle">Visualização em tempo real das persistências no sistema.</p>
+        </div>
+
+        <div class="hospedes-table-wrap">
+          <table id="tabelaHospedes">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>CPF</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="listaHospedesBody">
+              <tr>
+                <td colspan="4" class="empty-state">Nenhum hóspede cadastrado ainda.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="demo-actions-footer">
+          <button type="button" id="btnResetarDemo" class="btn btn-secondary btn-sm">
+            Recarregar Dados Demo
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
